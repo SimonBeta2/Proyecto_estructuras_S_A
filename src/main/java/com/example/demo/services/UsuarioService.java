@@ -1,5 +1,6 @@
 package com.example.demo.services;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,17 @@ public class UsuarioService{
 
         return usuarioRepository.save(usuario);
 }
+
+    public Optional<UsuarioModel> obtenerPorId(Integer id){
+        return usuarioRepository.findById(id);
+    }
+
+    public boolean eliminarUsuario(Integer id){
+        try {
+            usuarioRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

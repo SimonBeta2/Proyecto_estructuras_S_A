@@ -3,6 +3,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ public class UsuarioModel {
 
     @CreationTimestamp
     @Column(name = "fecha_registro", updatable = false,nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaRegistro;  
 
     public int getId() {
