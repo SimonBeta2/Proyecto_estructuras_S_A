@@ -1,12 +1,11 @@
 package com.example.demo.services;
-import com.example.demo.repositories.UsuarioRepository;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 import com.example.demo.models.UsuarioModel;
+import com.example.demo.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService{
@@ -17,7 +16,18 @@ public class UsuarioService{
         return (ArrayList<UsuarioModel>) usuarioRepository.findAll();
     }
 
-    public UsuarioModel guardarUsuario(UsuarioModel usuario){
+    public UsuarioModel crearUsuario(UsuarioModel usuario) {
         return usuarioRepository.save(usuario);
-    }
+}
+
+    public UsuarioModel actualizarUsuario(Integer id, UsuarioModel datos) {
+        UsuarioModel usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        usuario.setNombre(datos.getNombre());
+        usuario.setEmail(datos.getEmail());
+        usuario.setTelefono(datos.getTelefono());
+
+        return usuarioRepository.save(usuario);
+}
 }
