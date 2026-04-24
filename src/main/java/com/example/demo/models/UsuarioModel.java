@@ -43,6 +43,10 @@ public class UsuarioModel {
     @Pattern(regexp = "^[0-9]{10}$", message = "El teléfono debe tener 10 dígitos numericos juntos")
     private String telefono;
 
+    @Column(nullable = false)
+    @NotBlank
+    private String password;
+
     @CreationTimestamp
     @Column(name = "fecha_registro", updatable = false,nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -82,6 +86,14 @@ public class UsuarioModel {
 
     public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     

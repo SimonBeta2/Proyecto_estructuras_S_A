@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
 
@@ -20,7 +20,16 @@ public class UsuarioService{
     public UsuarioModel crearUsuario(UsuarioModel usuario) {
         return usuarioRepository.save(usuario);
 }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    public UsuarioModel guardarUsuario(UsuarioModel usuario){
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        return usuarioRepository.save(usuario);
+}
+    public Optional<UsuarioModel> buscarPorEmail(String email){
+    return usuarioRepository.findByEmail(email);
+}
     public UsuarioModel actualizarUsuario(Integer id, UsuarioModel datos) {
         if (!usuarioRepository.existsById(id)) {
             throw new RuntimeException("Usuario no encontrado");

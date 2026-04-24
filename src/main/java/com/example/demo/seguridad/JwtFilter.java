@@ -1,0 +1,54 @@
+package com.example.demo.seguridad;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+@Component
+public class JwtFilter extends OncePerRequestFilter {
+
+    @Autowired
+    JwtService jwtService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain)
+            throws ServletException, IOException {
+
+        String header = request.getHeader("Authorization");
+
+        if (header != null && header.startsWith("Bearer ")) {
+
+            String token = header.substring(7);
+
+            if (jwtService.esValido(token)) {
+
+                String email = jwtService.extraerEmail(token);
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of()
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+
+            } else {
+                throw new RuntimeException("Token inválido");
+            }
+        }
+
+        chain.doFilter(request, response);
+    }
+}

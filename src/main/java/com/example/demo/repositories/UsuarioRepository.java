@@ -6,5 +6,5 @@ import com.example.demo.models.UsuarioModel;
 
 @Repository
 public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>{
-
+    public java.util.Optional<UsuarioModel> findByEmail(String email);
 }
