@@ -28,7 +28,7 @@ public class UsuarioService{
         return usuarioRepository.save(usuario);
 }
     public Optional<UsuarioModel> buscarPorEmail(String email){
-    return usuarioRepository.findByEmail(email);
+        return usuarioRepository.findByEmail(email);
 }
     public UsuarioModel actualizarUsuario(Integer id, UsuarioModel datos) {
         if (!usuarioRepository.existsById(id)) {
@@ -56,5 +56,17 @@ public class UsuarioService{
             throw new RuntimeException("Usuario no encontrado");
     }
         usuarioRepository.deleteById(id);
+    }
+
+    public User findOrCreateUser(String email, String name, String googleId) {
+        return userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    UsuarioModel newUser = new User();
+                    newUser.setEmail(email);
+                    newUser.setName(name);
+                    newUser.setGoogleId(googleId);
+                    newUser.setPictureUrl(pictureUrl);
+                    return userRepository.save(newUser);
+                });
     }
 }
