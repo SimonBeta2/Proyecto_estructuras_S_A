@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
-import com.example.demo.seguridad.JwtAuthenticationFilter;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import com.example.demo.seguridad.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,7 +40,14 @@ public class SecurityConfig {
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                
+                // 1. TUS NUEVAS RUTAS PÚBLICAS (Añade esto)
+                .requestMatchers("/api/servicios/**", "/api/productos/**").permitAll() 
+                
+                // 2. RUTAS DE AUTENTICACIÓN (Las que ya tenías)
                 .requestMatchers("/oauth2/**", "/login/**", "/api/auth/**").permitAll()
+                
+                // 3. TODO LO DEMÁS ES PRIVADO
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

@@ -37,6 +37,7 @@ public class UsuarioModel {
     private Integer id;
 
     @NotBlank
+    @Column(length = 200)
     private String nombre;
 
     @NotBlank
