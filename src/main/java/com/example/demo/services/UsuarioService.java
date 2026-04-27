@@ -34,15 +34,15 @@ public class UsuarioService{
     // 2. Actualizamos los datos básicos
     usuario.setNombre(datos.getName());
     usuario.setEmail(datos.getEmail());
-    usuario.setTelefono(datos.getTelefono());
+    usuario.setTelefono(datos.getPhone());
 
     // 3. Actualizamos las direcciones (si es que el Frontend las envió)
-    if (datos.getDirecciones() != null) {
+    if (datos.getAddress() != null) {
         // Limpiamos la lista actual (esto activa el orphanRemoval para borrar las viejas)
         usuario.getDirecciones().clear();
         
         // Recorremos las direcciones que vienen en el JSON
-        for (DireccionModel dir : datos.getDirecciones()) {
+        for (DireccionModel dir : datos.getAddress()) {
             // Es VITAL decirle a la dirección quién es su dueño
             dir.setUsuario(usuario); 
             // Y luego la metemos a la lista del usuario

@@ -11,17 +11,17 @@ public class UsuarioDTO {
     private Integer id;
     private String email;
     private String name;
-    private String telefono;
+    private String phone;
     private String pictureUrl;
-    private List<DireccionModel> direcciones;
+    private List<DireccionModel> address;
     
-    public UsuarioDTO(Integer id, String email, String name, String telefono, String pictureUrl, List<DireccionModel> direcciones) {
+    public UsuarioDTO(Integer id, String email, String name, String phone, String pictureUrl, List<DireccionModel> address) {
     this.id = id;
     this.email = email;
     this.name = name;
-    this.telefono = telefono;
+    this.phone = phone;
     this.pictureUrl = pictureUrl;
-    this.direcciones = direcciones;
+    this.address = address;
 }
 
     public Integer getId() {
@@ -48,12 +48,12 @@ public class UsuarioDTO {
         this.name = name;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPictureUrl() {
@@ -64,11 +64,11 @@ public class UsuarioDTO {
         this.pictureUrl = pictureUrl;
     }
 
-    public List<DireccionModel> getDirecciones() {
-        return direcciones;
+    public List<DireccionModel> getAddress() {
+        return address;
     }
 
-    public void setDirecciones(List<DireccionModel> direcciones) {
-        this.direcciones = direcciones;
+    public void setAddress(List<DireccionModel> address) {
+        this.address = address;
     }
 }
