@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
+@CrossOrigin(origins = "https://domu-services.vercel.app")
 public class UsuarioController{
     @Autowired
     UsuarioService usuarioService;
