@@ -18,14 +18,14 @@ import lombok.Data;
 @Table(name = "direcciones")
 public class DireccionModel {
 
-    @Column(name = "street", length = 50)
-    private String street;
+    @Column(length = 50)
+    private String nombre;
 
-    @Column(name = "city", length = 50)
-    private String city;
+    @Column(length = 50)
+    private String ciudad;
 
-    @Column(name = "label", length = 150)
-    private String label;
+    @Column(length = 150)
+    private String comentarios;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,22 +41,22 @@ public class DireccionModel {
     }
 
 
-    public DireccionModel(String street, String city, String label) {
-        this.street = street;
-        this.city = city;
-        this.label = label;
+    public DireccionModel(String nombre, String ciudad, String comentarios) {
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.comentarios = comentarios;
     }
 
-    public String getStreet() {
-        return street;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getCity() {
-        return city;
+    public String getCiudad() {
+        return ciudad;
     }
 
-    public String getLabel() {
-        return label;
+    public String getComentarios() {
+        return comentarios;
     }
 
     public Integer getId() {
