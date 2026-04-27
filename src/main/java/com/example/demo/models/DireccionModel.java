@@ -18,13 +18,13 @@ import lombok.Data;
 @Table(name = "direcciones")
 public class DireccionModel {
 
-    @Column(length = 50)
+    @Column(name = "street", length = 50)
     private String street;
 
-    @Column(length = 50)
+    @Column(name = "city", length = 50)
     private String city;
 
-    @Column(length = 150)
+    @Column(name = "label", length = 150)
     private String label;
 
     @Id
