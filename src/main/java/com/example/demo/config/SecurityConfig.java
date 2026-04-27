@@ -1,5 +1,4 @@
 package com.example.demo.config;
-
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.example.demo.seguridad.JwtAuthenticationFilter;
 
@@ -28,32 +27,51 @@ public class SecurityConfig {
     private String allowedOrigins;
 
     public SecurityConfig(OAuth2AuthenticationSuccessHandler successHandler,
-                         JwtAuthenticationFilter jwtAuthenticationFilter) {
+                          JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.successHandler = successHandler;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    // 1. EL FILTRO CORS GLOBAL
+    // Al ser un @Bean de tipo CorsFilter, Spring lo ejecuta ANTES de la seguridad
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        
+        config.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
+        config.setExposedHeaders(Arrays.asList("Authorization"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        
+        return new CorsFilter(source);
+    }
+
+    // 2. LA CADENA DE SEGURIDAD
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            // ELIMINAMOS .cors() DE AQUÍ PARA QUE NO CHOQUE CON EL FILTRO DE ARRIBA
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 
-
+                // Permitir siempre el Preflight de CORS
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                // Temporal para prueba: Permitir PUT directo
                 .requestMatchers(HttpMethod.PUT, "/usuario/**").permitAll()
 
-                // 1. TUS NUEVAS RUTAS PÚBLICAS (Añade esto)
+                // Rutas públicas
                 .requestMatchers("/api/servicios/**", "/api/productos/**", "/api/ofertas/**").permitAll()
-                
-                // 2. RUTAS DE AUTENTICACIÓN (Las que ya tenías)
                 .requestMatchers("/oauth2/**", "/login/**", "/api/auth/**").permitAll()
                 
-                // 3. TODO LO DEMÁS ES PRIVADO
+                // Todo lo demás privado
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
@@ -63,30 +81,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-    
-    // Convertimos el String de orígenes a una lista limpia
-        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
-    
-    // En lugar de "*", vamos a ser específicos con los métodos
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-    
-    // IMPORTANTE: Permitir estas cabeceras específicamente
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
-    
-    // Permitir que el cliente lea estas cabeceras
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-    
-        configuration.setAllowCredentials(true);
-    
-    // Cache de la respuesta preflight (1 hora) para evitar tantas peticiones OPTIONS
-        configuration.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-}
 }
