@@ -62,4 +62,10 @@ public class OfertaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<List<OfertaModel>> obtenerOfertasPorUsuario(@PathVariable Integer userId) {
+        List<OfertaModel> ofertas = ofertaService.listarOfertasPorUsuario(userId);
+        return ResponseEntity.ok(ofertas);
+    }
 }

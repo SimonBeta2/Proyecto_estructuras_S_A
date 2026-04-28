@@ -85,5 +85,9 @@ public class OfertaService {
         ofertaRepository.deleteById(id);
     }
 
+    public List<OfertaModel> listarOfertasPorUsuario(Integer userId) {
+        return ofertaRepository.findByUsuarioId(userId);
+    }
+
 
 }

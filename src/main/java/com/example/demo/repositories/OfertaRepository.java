@@ -15,4 +15,5 @@ public interface OfertaRepository extends JpaRepository<OfertaModel, Integer> {
     
     // Extra: Si quisieras buscar todas las ofertas de un usuario específico
     List<OfertaModel> findByUsuarioId(Integer usuarioId);
+    
 }
